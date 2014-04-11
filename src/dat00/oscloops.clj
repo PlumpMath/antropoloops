@@ -6,7 +6,7 @@
    quil.core
    [ dat00.util :as util]
    [ dat00.osc :as osc]
-   [ dat00.bd :as bd]
+
 
    ))
 
@@ -106,27 +106,11 @@
 (defn make-async-call-for-all-clips []
   (osc/send-osc-message (osc/make-osc-message "/live/name/clip" )))
 
-;; TODO: check that exist a place and a song if not throw an exception
+
 (defn read-clip-info [osc-message ]
-  (let [[track clip nombre]  (.arguments osc-message)
-        song (first (filter #(= (:nombreArchivo %) nombre) bd/loops))]
-    { :nombre nombre :track track :clip clip
-     :color-s (random 50 100 )
-     :color-b (random 80 100)
-     :color-h (condp = (int track)
-                0 (random 105 120)
-                1 (random 145 160)
-                2 (random 300 315)
-                3 (random 330 345)
-                4 (random 195 210)
-                5 (random 230 245)
-                6 (random 25 40)
-                7 (random 50 65)
-                )
-     :image  (load-image (str "resources/0_portadas/" nombre  ".jpg"))
-     :song  song
-     :lugar (first (filter #(= (:lugar %) (:lugar song)) bd/lugares))
-     })
+  (let [[track clip nombre]  (.arguments osc-message)]
+    { :track track :clip clip :nombre nombre}
+    )
   )
 
 (defn init-oscP5-communication [papplet]

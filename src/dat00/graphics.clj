@@ -11,22 +11,15 @@
   (text "by MI-MI NA" 10 790)
 )
 
-(defn setup-graphics []
-  (color-mode :hsb 360 100 100))
-
-(defn load-resources []
-  (def mundi (load-image "resources/1_BDatos/mapa_1280x800.png"))
-
-  (def font (load-font "resources/1_BDatos/ArialMT-20.vlw"))
-
+(defn draw-album [active-loop posicion-x-disco fecha]
+  (image (:image active-loop) posicion-x-disco 0 160 160)
+  (fill (:color-h active-loop) (:color-s active-loop) (:color-b active-loop) 45 )
+  (text fecha (+ 5 posicion-x-disco) 190)
   )
-
-(defn draw-background []
-  (background (unhex "2b2b2b"))
-  (image mundi 0 0 )
-  (fill 50)
-  (no-stroke)
-  (rect 0 0 (width) 160)
+(defn draw-line-country [active-loop posicion-x-disco lugar]
+  (stroke (:color-h active-loop) (:color-s active-loop) (:color-b active-loop) (* 100 (:volume active-loop)) )
+  (stroke-weight 2)
+  (line posicion-x-disco 189 (:coordX lugar) (:coordY lugar))
 )
 (defn abanica [x y d h s b]
   (doseq [i (range 20)]
@@ -45,3 +38,28 @@
      (and (< d 60) (<= d 90)) :b
      (and  (> d 40)) :c
      )))
+
+(defn draw-abanico-country [active-loop lugar tempo m]
+  (push-matrix)
+  (translate (:coordX lugar) (:coordY lugar))
+  (rotate (radians (/ m (/ 60 (* tempo (int (:loopend active-loop)))))))
+  (abanica (:coordX lugar) (:coordY lugar) (* 100 (:volume active-loop)) (:color-h active-loop) (:color-s active-loop) (:color-b active-loop))
+  (pop-matrix)
+)
+(defn setup-graphics []
+  (color-mode :hsb 360 100 100))
+
+(defn load-resources []
+  (def mundi (load-image "resources/1_BDatos/mapa_1280x800.png"))
+
+  (def font (load-font "resources/1_BDatos/ArialMT-20.vlw"))
+
+  )
+
+(defn draw-background []
+  (background (unhex "2b2b2b"))
+  (image mundi 0 0 )
+  (fill 50)
+  (no-stroke)
+  (rect 0 0 (width) 160)
+)

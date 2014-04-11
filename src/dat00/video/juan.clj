@@ -1,4 +1,4 @@
-(ns dat00.juan
+(ns dat00.video.juan
   (:import (processing.video Movie))
   (:use quil.core
         [quil.helpers.drawing :only [line-join-points]]

@@ -16,21 +16,17 @@
                        (.add m 90)
                        (.add m "hola")
                        ))
+
 (def example-message-st (let [m (OscMessage. "/the-message")]
                           (.add m "90")
                           (.add m 80)
 
   ))
 
-(.intValue (.get example-message 0))
-
-
-
-
+;(.intValue (.get example-message 0))
 
 (defn send-osc-message [message]
   (.send my-oscP5 message my-remote-location))
-
 
 (defn init-oscP5 [papplet]
   (comment

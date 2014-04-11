@@ -82,4 +82,4 @@
 
 
 
-(get-values-from-oscp5-message ["the message" "otro"] [:pepe 0 :toString ] [:juan 1 :getClass])
+;(get-values-from-oscp5-message ["the message" "otro"] [:pepe 0 :toString ] [:juan 1 :getClass])

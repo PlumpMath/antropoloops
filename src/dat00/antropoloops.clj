@@ -3,12 +3,17 @@
         [dat00.oscloops :as osc-loops]
         [dat00.util :as ut]
         [clj-time.local :as l]
+        [ clj-time.coerce :as c :only [to-long]]
           quil.core))
 
 (declare    antropo-loops-indexed   tempo current-index )
-(l/local-now)
+(defn get-long-time []
+(c/to-long (l/local-now))
+  )
+
 
 (def antropo-loops (atom {}))
+(def history (atom []))
 
 
 ;; ANTROPOLOOPS API
@@ -18,6 +23,7 @@
     (swap! current-index inc)))
 
 (defn change-loop-state [{:keys [track-value clip-value state-value]} ]
+  (swap!  history conj (merge {:id "change-loop-state" :time (get-long-time) } {:clip clip-value :track track-value :state state-value}))
   (swap!  antropo-loops assoc-in [{:clip clip-value :track track-value} :state] state-value)
   )
 
@@ -30,9 +36,11 @@
       (swap!  antropo-loops assoc-in [(key c) the-keyword] the-value))))
 
 (defn change-volume [{:keys [track volume]}]
+  (swap!  history conj (merge {:id "change-volume" :time (get-long-time) } {:track track :volume volume}))
   (update-track-prop-value track :volume  volume))
 
 (defn change-solo [{:keys [track solo]}]
+  (swap!  history conj (merge {:id "change-solo" :time (get-long-time) } {:track track :solo solo}))
   (update-track-prop-value track :solo  solo))
 
 (defn load-clip [{:keys [track clip nombre] } ]
@@ -56,10 +64,15 @@
                     :lugar (first (filter #(= (:lugar %) (:lugar song)) bd/lugares))
                     }
         ]
-    (ut/append-io "tmp/history.json" (assoc {:id "load-clip" :time (l/local-now) } antro-loop))
+
+
+
     (swap! antropo-loops assoc (select-keys antro-loop [:track :clip] ) antro-loop )
     )
   )
+
+
+(merge {:id "load-clip" :time (get-long-time) } {:jhhol 12})
 
 (defn reset[]
   (reset! antropo-loops {})

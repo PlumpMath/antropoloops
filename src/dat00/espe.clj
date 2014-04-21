@@ -12,6 +12,11 @@
 (def drawing (atom false))
 
 (defn setup  []
+
+  (ut/remove-file "tmp/history.json")
+         (ut/remove-file "tmp/aloops.json")
+         (ut/new-io-file "tmp/history.json")
+
   (g/setup-graphics)
   (g/load-resources))
 
@@ -42,14 +47,15 @@
   (condp = (raw-key)
     \1 (do
          (antropoloops/reset)
-         (ut/new-io-file "tmp/history.json")
-         (ut/new-io-file "tmp/aloops.json"))
+         )
     \2 (async-request-loops-info)
     \3 (do (println "draw running")
-           (ut/write-io "tmp/aloops.json" @antropoloops/antropo-loops)
            (reset! drawing true))
     \4 (println "println loops indexed" antropoloops/antropo-loops-indexed)
     \5 (println "print misatropolops" @antropoloops/antropo-loops)
+    \6 (do
+         (ut/write-io "tmp/aloops.json" @antropoloops/antropo-loops)
+         (ut/write-io "tmp/history.json" @antropoloops/history))
     (println (str "no mapped key " (raw-key))))
   )
 (defsketch juan
@@ -62,6 +68,10 @@
 
 (osc-loops/init-oscP5-communication juan)
 
+(defn -main
+  "The application's main function"
+  [& args]
+  (println args))
 
 (comment "testing antropoloops API!!!"
   (antropoloops/change-loop-state {:clip-value 0, :track-value 0 :state-value 2})

@@ -1,4 +1,22 @@
-(ns dat00.util)
+(ns dat00.util
+  (:use [clojure.java.io]
+        [clojure.data.json :as json :only [read-str]]))
+
+(defn write-io [path o] (spit path o))
+
+(defn append-io [path o]
+  (with-open [wrtr (writer path :append true)]
+    (.write wrtr (json/write-str o)))
+  )
+
+(defn new-io-file [path ]
+ (with-open [wrtr (writer path)]
+  (.write wrtr ""))
+
+  )
+
+
+
 
 (defn substring? [sub st]
   (if (not= (.indexOf st sub) -1)

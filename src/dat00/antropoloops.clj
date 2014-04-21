@@ -1,9 +1,12 @@
 (ns dat00.antropoloops
   (:use [ dat00.bd :as bd]
         [dat00.oscloops :as osc-loops]
+        [dat00.util :as ut]
+        [clj-time.local :as l]
           quil.core))
 
 (declare    antropo-loops-indexed   tempo current-index )
+(l/local-now)
 
 (def antropo-loops (atom {}))
 
@@ -18,7 +21,7 @@
   (swap!  antropo-loops assoc-in [{:clip clip-value :track track-value} :state] state-value)
   )
 
-(defn update-track-prop-value [track-value the-keyword the-value]
+(defn- update-track-prop-value [track-value the-keyword the-value]
   (let [coincidences (filter (fn [v]
                                (let [{:keys [track clip]} (key v)]
                                  (= track-value track )))
@@ -53,6 +56,7 @@
                     :lugar (first (filter #(= (:lugar %) (:lugar song)) bd/lugares))
                     }
         ]
+    (ut/append-io "tmp/history.json" (assoc {:id "load-clip" :time (l/local-now) } antro-loop))
     (swap! antropo-loops assoc (select-keys antro-loop [:track :clip] ) antro-loop )
     )
   )

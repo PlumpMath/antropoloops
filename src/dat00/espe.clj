@@ -6,6 +6,7 @@
    quil.core
    [ dat00.bd :as bd]
    [clojure.data.json :as json :only [read-str]]
+   [dat00.util :as ut]
    ))
 
 (def drawing (atom false))
@@ -39,9 +40,14 @@
 (defn key-press []
   (println (str "Key pressed: " (raw-key)))
   (condp = (raw-key)
-    \1 (antropoloops/reset)
+    \1 (do
+         (antropoloops/reset)
+         (ut/new-io-file "tmp/history.json")
+         (ut/new-io-file "tmp/aloops.json"))
     \2 (async-request-loops-info)
-    \3 (do (println "draw running") (reset! drawing true))
+    \3 (do (println "draw running")
+           (ut/write-io "tmp/aloops.json" @antropoloops/antropo-loops)
+           (reset! drawing true))
     \4 (println "println loops indexed" antropoloops/antropo-loops-indexed)
     \5 (println "print misatropolops" @antropoloops/antropo-loops)
     (println (str "no mapped key " (raw-key))))

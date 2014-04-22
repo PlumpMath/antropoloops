@@ -14,6 +14,6 @@
 
                 ; [com.datomic/datomic-free "0.9.4556"]
                  ]
-  :resource-paths ["lib/gstreamer-java.jar" "lib/video.jar" "lib/jna.jar" "lib/macosx64" "lib/oscP5.jar"]
-:main dat00.espe
+  :resource-paths ["lib/gstreamer-java.jar" "lib/geomerative.jar" "lib/batikfont" "lib/video.jar" "lib/jna.jar" "lib/macosx64" "lib/oscP5.jar"]
+;:main dat00.espe
   )

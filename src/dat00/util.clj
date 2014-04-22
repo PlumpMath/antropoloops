@@ -1,5 +1,5 @@
 (ns dat00.util
-  (:use [clojure.java.io]
+  (:use [clojure.reflect] [clojure.java.io]
         [clojure.data.json :as json :only [read-str]]))
 (defn remove-file [path] (try  (delete-file path)
                                (catch Exception e (str "caught exception: " (.getMessage e)))
@@ -30,3 +30,14 @@
    (list (symbol (str "." (name v)))))
 
 (comment (eval-java-method :getClass ))
+
+
+(defn all-methods [x]
+    (->> x reflect
+           :members
+           (filter :return-type)
+           (map :name)
+           sort
+           (map #(str "." %) )
+           distinct
+           println))

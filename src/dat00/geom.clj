@@ -49,8 +49,8 @@
 
 
 
-(count (get-points-seq points-clj))
-#_(change-svg tucan (- 500 40) 0 500)
+;(count (get-points-seq points-clj))
+;(change-svg tucan (- 500 40) 0 500)
 (def nervous 5)
 (defn draw []
   (change-svg tucan (oper (rand nervous) @my-rand) 0 500)

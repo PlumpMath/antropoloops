@@ -39,7 +39,7 @@
 
 
 
-(get-count cl2)
+;(get-count cl2)
 ((defn rect-coords-grid [the-widht  c]
    (let [n-items (get-count c)
          item-w (int (/ the-widht n-items))]

@@ -6,13 +6,36 @@
            [toxi.color.theory ColorTheoryStrategy ColorTheoryRegistry]
            ))
 
-(defmulti get-count type)
+(comment (defmulti count type)
 
-(defmethod get-count toxi.color.ColorList [a]
-  (.size a))
-(defmethod get-count clojure.lang.LazySeq [a]
-  (count a))
+         (defmethod count toxi.color.ColorList [a]
+           (.size a))
+         (defmethod count clojure.lang.LazySeq [a]
+           (count a)))
 
+(defprotocol countable
+  (get-count [this]))
+
+(extend-protocol countable
+  ColorList
+  (get-count [this]
+    (.size this))
+  clojure.lang.LazySeq
+    (get-count [this]
+    (.count this))
+  )
+
+(get-count (ColorList.))
+(get-count (range 5))
+
+
+
+(comment "doesn't work!"
+         (extend-type  ColorList
+   clojure.lang.Counted
+
+   (count [this]
+     (.size this))))
 
 
 (defmulti rgb type)

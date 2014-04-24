@@ -1,14 +1,11 @@
-(ns dat00.geom
+(ns dat00.mmundi
 
   (:use quil.core
-
         [dat00.util :as ut]
-
         [quil.helpers.drawing :only [line-join-points]]
         [quil.helpers.seqs :only [range-incl steps]])
-  (:require [clojure.zip :as zip])
-  (:import [geomerative RShape RG RPoint RFont]
-           [processing.core PApplet ]))
+    (:import [geomerative RShape RG RPoint RFont]
+             [processing.core PApplet ]))
 
 
 (declare grp juan font points-clj tucan )
@@ -41,7 +38,7 @@
   (frame-rate 5)
   (println "setup completed!")
   (RG/init juan)
-  (def tucan (RG/loadShape "data/peninsule.svg"))
+  (def tucan (RG/loadShape "data/mapaAzimutal.svg"))
   (def grp (RG/getText "hola" "data/FreeSans.ttf" 150 PApplet/CENTER))
   (RG/centerIn grp (.-g juan) 100)
   (RG/setPolygonizer RG/UNIFORMLENGTH)
@@ -77,16 +74,9 @@
     (end-shape)
 
 
-  (pop-matrix)
-  (comment (push-matrix)
-           (push-style)
-           (scale 0.5)
-           (RG/ignoreStyles)
-           (no-fill)
-           (stroke 0 50)
-           (.draw tucan)
-           (pop-style)
-           (pop-matrix))
+    (pop-matrix)
+    (.draw tucan)
+
 
   )
 
@@ -113,35 +103,5 @@
 (defsketch juan
   :setup setup
   :draw draw
-  :size [500 500]
+  :size [1500 500]
   :mouse-moved mouse-moved)
-
-
-
-
-
-
-
-
-
-
-
-
-
-(comment "parsing tree svg data with clojure zipper"
-         (defn is-parent? [c] (not (zero? (count (.getChildren c)))))
-         (def zp (zip/zipper is-parent? (fn [c] (.getChildren c)) (fn [n c] c) tucan))
-
-         (defn zip-reduce
-           "Reduce called on a zipper."
-           [f acc z]
-           (if (zip/end? z)
-             acc
-             (if (and (not= (type []) (type z)) (= 2 (count  (clojure.string/trim (.-name z)))))
-               (recur f (f acc z) (zip/next z))
-               (recur f acc (zip/next z))
-               )))
-
-         (def p (zip-reduce conj [] zp))
-
-)

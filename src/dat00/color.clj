@@ -14,7 +14,10 @@
            )
    )
 
+(defn get-colors [^ColorRange cr t-color num-colors variance]
 
+  (.getColors cr t-color num-colors variance)
+  )
 
 
 (def strategies (ColorTheoryRegistry/getRegisteredStrategies))
@@ -32,10 +35,7 @@
 
 (keys (ColorRange/PRESETS))
 
-(defn get-colors [^ColorRange cr t-color num-colors variance]
 
-  (.getColors cr t-color num-colors variance)
-  )
 
 
 

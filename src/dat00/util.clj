@@ -41,3 +41,10 @@
            (map #(str "." %) )
            distinct
            println))
+
+
+(def ops [+ -])
+(defn oper [v1 v2]
+  (condp = (rand-nth ops)
+    + (+ v1 v2)
+    - (- v2 v1)))

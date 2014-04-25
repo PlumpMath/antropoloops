@@ -17,14 +17,14 @@
   (text fecha (+ 5 posicion-x-disco) 190)
   )
 (defn draw-line-country [active-loop posicion-x-disco lugar]
-  (stroke (:color-h active-loop) (:color-s active-loop) (:color-b active-loop) (* 100 (:volume active-loop)) )
-  (stroke-weight 2)
+   (stroke (:color-h active-loop) (:color-s active-loop) (:color-b active-loop) (* 100 (:volume active-loop)) )
+  (stroke-weight 1)
   (line posicion-x-disco 189 (:coordX lugar) (:coordY lugar))
 )
 (defn abanica [x y d h s b]
   (doseq [i (range 20)]
     (stroke h s b)
-    (stroke-weight 1)
+    (stroke-weight 0.5)
 (do
                  (line 0 0 0 (- 0 (/ d 4)))
                  (no-stroke)
@@ -40,11 +40,17 @@
      )))
 
 (defn draw-abanico-country [active-loop lugar tempo m]
-  (push-matrix)
-  (translate (:coordX lugar) (:coordY lugar))
-  (rotate (radians (/ m (/ 60 (* tempo (int (:loopend active-loop)))))))
-  (abanica (:coordX lugar) (:coordY lugar) (* 100 (:volume active-loop)) (:color-h active-loop) (:color-s active-loop) (:color-b active-loop))
-  (pop-matrix)
+  #_(do (println active-loop)
+           (println (radians (/ m (/ 60 (* tempo (int (:loopend active-loop)))))))
+           (println tempo)
+           (println m)
+           (println "******"))
+
+  (do (push-matrix)
+           (translate (:coordX lugar) (:coordY lugar))
+           (rotate (radians (/ m (/ 60 (* tempo (int (:loopend active-loop)))))))
+           (abanica (:coordX lugar) (:coordY lugar) (* 100 (:volume active-loop)) (:color-h active-loop) (:color-s active-loop) (:color-b active-loop))
+           (pop-matrix))
 )
 (defn setup-graphics []
   (color-mode :hsb 360 100 100))

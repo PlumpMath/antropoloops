@@ -59,3 +59,10 @@
   (def h (slurp "resources/loop-session/history.json"))
   (def history (edn/read-string h))
          )
+
+
+(defn get-test-json [path]
+    (edn/read-string (slurp path))
+
+
+  )

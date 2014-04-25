@@ -22,6 +22,7 @@
     (swap!  antropo-loops assoc-in [the-index :loopend] loopend-value)
     (swap! current-index inc)))
 
+
 (defn change-loop-state [{:keys [track-value clip-value state-value]} ]
   (swap!  history conj (merge {:id "change-loop-state" :time (get-long-time) } {:clip clip-value :track track-value :state state-value}))
   (swap!  antropo-loops assoc-in [{:clip clip-value :track track-value} :state] state-value)
@@ -62,6 +63,8 @@
                     :image  (load-image (str "resources/0_portadas/" nombre  ".jpg"))
                     :song  song
                     :lugar (first (filter #(= (:lugar %) (:lugar song)) bd/lugares))
+                    :volume 0
+                    :loopend 1
                     }
         ]
 
@@ -69,6 +72,10 @@
 
     (swap! antropo-loops assoc (select-keys antro-loop [:track :clip] ) antro-loop )
     )
+  )
+
+(defn load-tempo [tempo]
+  (def tempo 0.5)
   )
 
 

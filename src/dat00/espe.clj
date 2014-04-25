@@ -56,6 +56,12 @@
     \6 (do
          (ut/write-io "tmp/aloops.json" @antropoloops/antropo-loops)
          (ut/write-io "tmp/history.json" @antropoloops/history))
+    \7  (do
+          (def sess-loop (ut/get-test-json "resources/loop-session/aloops.json"))
+          antropoloops/antropo-loops
+          (def f-sess-loop (first sess-loop))
+          (antropoloops/load-clip (merge (key f-sess-loop) {:nombre (:nombre (val f-sess-loop))}) )
+          )
     (println (str "no mapped key " (raw-key))))
   )
 (defsketch juan
@@ -68,12 +74,18 @@
 
 (osc-loops/init-oscP5-communication juan)
 
+(comment
+  )
+
+
 (defn -main
   "The application's main function"
   [& args]
   (println args))
 
 (comment "testing antropoloops API!!!"
-  (antropoloops/change-loop-state {:clip-value 0, :track-value 0 :state-value 2})
-  (antropoloops/change-volume {:track 0 :volume 1.8})
+         (antropoloops/load-tempo 0.5)
+         (antropoloops/change-loop-state {:clip-value 4, :track-value 1 :state-value 2})
+
+  (antropoloops/change-volume {:track 1 :volume 1.8})
   (antropoloops/change-volume {:track 2 :volume 1.8}))

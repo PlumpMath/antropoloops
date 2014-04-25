@@ -60,7 +60,12 @@
           (def sess-loop (ut/get-test-json "resources/loop-session/aloops.json"))
           antropoloops/antropo-loops
           (def f-sess-loop (first sess-loop))
-          (antropoloops/load-clip (merge (key f-sess-loop) {:nombre (:nombre (val f-sess-loop))}) )
+          (doall (map
+                  (fn [f-sess-loop] (antropoloops/load-clip (merge (key f-sess-loop) {:nombre (:nombre (val f-sess-loop))}) ))
+                  sess-loop))
+
+                    (def sess-history (ut/get-test-json "resources/loop-session/history.json"))
+
           )
     (println (str "no mapped key " (raw-key))))
   )
@@ -78,6 +83,20 @@
   )
 
 
+(defn process-history-event [event]
+  (let [res (first  (disj  (set (keys event)) :track :id :time))]
+
+   #_(condp = res
+       :volume   (antropoloops/change-volume event)
+
+
+      (do #_(println "not mapped"))
+      )
+   res
+    )
+  )
+
+
 (defn -main
   "The application's main function"
   [& args]
@@ -88,4 +107,4 @@
          (antropoloops/change-loop-state {:clip-value 4, :track-value 1 :state-value 2})
 
   (antropoloops/change-volume {:track 1 :volume 1.8})
-  (antropoloops/change-volume {:track 2 :volume 1.8}))
+  (antropoloops/change-volume {:track 1 :volume 0.8}))

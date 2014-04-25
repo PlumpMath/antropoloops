@@ -1,6 +1,7 @@
 (ns dat00.util
   (:use [clojure.reflect] [clojure.java.io]
-        [clojure.data.json :as json :only [read-str]]))
+        [clojure.data.json :as json :only [read-str]])
+  (:require [clojure.edn :as edn]))
 (defn remove-file [path] (try  (delete-file path)
                                (catch Exception e (str "caught exception: " (.getMessage e)))
                                ))
@@ -48,3 +49,13 @@
   (condp = (rand-nth ops)
     + (+ v1 v2)
     - (- v2 v1)))
+
+
+(comment (def o (slurp "resources/loop-session/aloops.json"))
+         (def aloops (edn/read-string o))
+         )
+
+(comment
+  (def h (slurp "resources/loop-session/history.json"))
+  (def history (edn/read-string h))
+         )

@@ -26,7 +26,7 @@
   (swap!  history conj (merge {:id "change-loop-state" :time (get-long-time) } {:clip clip-value :track track-value :state state-value}))
   (swap!  antropo-loops assoc-in [{:clip clip-value :track track-value} :state] state-value)
   )
-
+;#<PImage [^> C-q C-j ]*>\(.*?\)>
 (defn- update-track-prop-value [track-value the-keyword the-value]
   (let [coincidences (filter (fn [v]
                                (let [{:keys [track clip]} (key v)]

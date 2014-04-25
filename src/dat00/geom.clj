@@ -24,11 +24,7 @@
                               [] points))))
 
 (def my-rand (atom 0))
-(def ops [+ -])
-(defn oper [v1 v2]
-  (condp = (rand-nth ops)
-   + (+ v1 v2)
-   - (- v2 v1)))
+
 (defn get-points-seq [p]
   (reduce (fn [c [x y]] (conj c x y))  []      (map (fn [[[x1 y1] xy2]]  [x1 y1] ) p )))
 (defn title []
@@ -56,7 +52,7 @@
 ;(change-svg tucan (- 500 40) 0 500)
 (def nervous 5)
 (defn draw []
-  (change-svg tucan (oper (rand nervous) @my-rand) 0 500)
+  (change-svg tucan (ut/oper (rand nervous) @my-rand) 0 500)
 
   (push-matrix)
   (stroke 0 50)
@@ -92,7 +88,7 @@
 
 (def h [1 2 3 4 5])
 (map-range 50 1 50 0 500)
-(oper 3 4)
+(ut/oper 3 4)
 
 
 

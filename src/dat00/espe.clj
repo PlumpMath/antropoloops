@@ -1,5 +1,6 @@
 (ns dat00.espe
   (:use
+   dat00.protocols
    [dat00.oscloops :as osc-loops]
    [dat00.graphics :as g]
    [dat00.analysis :as analysis]
@@ -11,6 +12,11 @@
    ))
 
 (def drawing (atom false))
+
+(defn get-colors [^toxi.color.ColorRange cr t-color num-colors variance]
+
+  (.getColors cr t-color num-colors variance)
+  )
 
 (declare history-paths)
 
@@ -24,6 +30,10 @@
   (g/setup-graphics)
   (g/load-resources))
 
+
+
+
+
 (defn draw []
   (frame-rate 1)
   (g/draw-background)
@@ -31,24 +41,34 @@
   (when (and (not-empty @antropoloops/antropo-loops) @drawing)
     (text "drawing!!" 10 175)
 
-    (doseq [track-path history-paths]
-      (stroke (random 0 360) 100 100)
-      (no-fill)
-      (doseq [track-line-path track-path]
-        (let [origen (first track-line-path)
-              ox (:coordX origen)
-              oy (:coordY origen)
-              fin (second track-line-path)
-              fx (:coordX fin)
-              fy (:coordY fin)
-              a1x (+ (random 10) (/ (abs (-  ox fx)) 2))
-              a1y fy
-              ]
+    (doseq [track-path-raw history-paths ]
+      (let [track-path (first  track-path-raw)
+            color-list-path (last track-path-raw) ]
 
-          (stroke-weight 1)
+        (no-fill)
+        (doseq [n (range  (count  track-path))]
 
-          (bezier ox oy 100 100 200 200  fx fy))
-        )
+          (let [track-line-path (nth track-path n)
+                color-line-path (.get color-list-path n)
+                origen (first track-line-path)
+                ox (+ 5 (:coordX origen))
+                oy (:coordY origen)
+                fin (second track-line-path)
+                fx (:coordX fin)
+                fy (:coordY fin)
+                a1x (if (not= ox fx) (+ ox (-  fx ox)) (- ox 20) )
+                a1y (if (not= oy fy)  (- oy (abs  (-  fy oy)) 100) (- oy 20))
+                a2x (if (not= ox fx) fx (+ fx 50))
+                a2y (if (not= oy fy)  fy (- oy 50))
+                ]
+            (stroke (rgb color-line-path))
+            (stroke-weight 1)
+
+            (doseq [i (range 10)]
+
+              (bezier (-  ox i) oy (- a1x i) (- a1y i)  a2x  a2y  fx fy))
+            )
+          ))
       )
 
     (let [m (millis)
@@ -67,6 +87,8 @@
           (g/draw-line-country active-loop posicion-x-disco lugar)
           (g/draw-abanico-country active-loop lugar tempo m)
           )))))
+
+
 
 (defn key-press []
   (println (str "Key pressed: " (raw-key)))
@@ -168,12 +190,26 @@
 
 
            (let [oc  (analysis/get-ordered-changes sess-history)]
-             (partition 2 1 (analysis/get-changes-state-track oc :1 sess-loop))
+            (partition 2 1 (analysis/get-changes-state-track oc :1 sess-loop))
+;             (analysis/get-changes-state-track oc :1 sess-loop)
              )
+           (partition 2 1 (range 10))
 
-           (def history-paths (let [oc  (analysis/get-ordered-changes sess-history)]
-              (
-               (map #(analysis/get-changes-state-track oc % sess-loop) (analysis/keyword-tracks)))
-              ))
+           (def colors (take 10 (repeatedly (fn [] (toxi.color.TColor/newRandom)))))
+           (let [color-range (get  (toxi.color.ColorRange/PRESETS) "FRESH")]
+             (.sortByCriteria  (get-colors color-range (toxi.color.TColor/newRandom) 20 0.1 ) toxi.color.AccessCriteria/BRIGHTNESS false))
+
+
+           (def history-paths (let [oc  (analysis/get-ordered-changes sess-history)
+                                    f-res (map #(analysis/get-changes-state-track oc % sess-loop)  (analysis/keyword-tracks))
+                                    f-cols (map
+                                            #(let [color-range (get  (toxi.color.ColorRange/PRESETS) "COOL")]
+                                               (.sortByCriteria  (get-colors color-range (toxi.color.TColor/newRandom) (count %) 0.1 )
+                                                                 toxi.color.AccessCriteria/BRIGHTNESS false))
+                                                         f-res)
+                                    ]
+                                (map #(vector  (partition 2 1 %) %2) f-res f-cols)
+                                )
+             )
            )
          )

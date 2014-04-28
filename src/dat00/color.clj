@@ -20,6 +20,8 @@
   )
 
 
+(count (take 10 (repeatedly (fn [] (toxi.color.TColor/newRandom)))))
+
 (def strategies (ColorTheoryRegistry/getRegisteredStrategies))
 (map #(.getName %) strategies)
 
@@ -29,8 +31,8 @@
 
   (def cl (ColorList/createUsingStrategy (nth  strategies 4) random-color))
 
-  (def cl2 (. (.getColors (doto (ColorRange. cl) (.addBrightnessRange 0 1) ) nil 100 0.05) (sortByDistance false)))
-  (def range-color-list  (map #(.sortByCriteria  (get-colors (val %) random-color 60 0.1 ) AccessCriteria/BRIGHTNESS false) (ColorRange/PRESETS))))
+  (def cl2 (. (.getColors (doto (ColorRange. cl) (.addBrightnessRange 0 1) ) nil 10 0.05) (sortByDistance false)))
+  (def range-color-list  (map #(.sortByCriteria  (get-colors (val %) random-color 20 0.1 ) AccessCriteria/BRIGHTNESS false) (ColorRange/PRESETS))))
 
 
 (keys (ColorRange/PRESETS))

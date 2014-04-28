@@ -64,7 +64,10 @@
                   (fn [f-sess-loop] (antropoloops/load-clip (merge (key f-sess-loop) {:nombre (:nombre (val f-sess-loop))}) ))
                   sess-loop))
 
-                    (def sess-history (ut/get-test-json "resources/loop-session/history.json"))
+          (def sess-history (ut/get-test-json "resources/loop-session/history.json"))
+          (def different-keys (reduce conj #{} (map keys sess-history)))
+
+
 
           )
     (println (str "no mapped key " (raw-key))))
@@ -84,15 +87,18 @@
 
 
 (defn process-history-event [event]
-  (let [res (first  (disj  (set (keys event)) :track :id :time))]
+  (let [res (first  (disj  (set (keys event)) :track :id :time :clip))]
 
-   #_(condp = res
-       :volume   (antropoloops/change-volume event)
-
+   (condp = res
+     :volume  (do (println "cHANGE VOLUME!!") (antropoloops/change-volume event))
+     :solo   (do (println "CHANGE SOLO!!") (antropoloops/change-solo event))
+     :state (do (println "change STate!!") (antropoloops/change-loop-state {:clip-value (:clip event)
+                                              :track-value (:track event)
+                                              :state-value (:state event)}))
 
       (do #_(println "not mapped"))
-      )
-   res
+
+      res)
     )
   )
 
@@ -106,5 +112,23 @@
          (antropoloops/load-tempo 0.5)
          (antropoloops/change-loop-state {:clip-value 4, :track-value 1 :state-value 2})
 
-  (antropoloops/change-volume {:track 1 :volume 1.8})
-  (antropoloops/change-volume {:track 1 :volume 0.8}))
+  (antropoloops/change-volume {:track 1 :volume 3.8})
+  (antropoloops/change-volume {:track 1 :volume 0.8})
+
+(comment
+            (let  [facts sess-history
+                   init-time (:time (first sess-history))]
+              (reduce (fn [c hist]
+                        (let [i (:time hist)
+                              wait-for (-  i c)
+                              ]
+                          ;(Thread/sleep wait-for)
+                          (println wait-for)
+;                          (println  hist)
+                          (process-history-event hist)
+                          i
+                          ) )
+                      init-time
+                       facts) )
+            )
+  )

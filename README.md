@@ -28,6 +28,13 @@ ctrl + c to close the terminal
 
 ```
 
+```
+1-2 bases 
+3-4 ritmos
+5-6 arreglos
+7-8 voces
+```
+
 FIXME
 
 ## License

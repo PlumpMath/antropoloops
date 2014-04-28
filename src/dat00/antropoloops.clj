@@ -14,7 +14,7 @@
 
 (def antropo-loops (atom {}))
 (def history (atom []))
-
+(def recording-history (atom false))
 
 ;; ANTROPOLOOPS API
 (defn change-loop-end [loopend-value]
@@ -24,24 +24,26 @@
 
 
 (defn change-loop-state [{:keys [track-value clip-value state-value]} ]
-  (swap!  history conj (merge {:id "change-loop-state" :time (get-long-time) } {:clip clip-value :track track-value :state state-value}))
+  (when @recording-history
+      (swap!  history conj (merge {:id "change-loop-state" :time (get-long-time) } {:clip clip-value :track track-value :state state-value})))
   (swap!  antropo-loops assoc-in [{:clip clip-value :track track-value} :state] state-value)
-  )
-;#<PImage [^> C-q C-j ]*>\(.*?\)>
-(defn- update-track-prop-value [track-value the-keyword the-value]
-  (let [coincidences (filter (fn [v]
-                               (let [{:keys [track clip]} (key v)]
-                                 (= track-value track )))
-                             @antropo-loops)]
-    (doseq [c coincidences]
-      (swap!  antropo-loops assoc-in [(key c) the-keyword] the-value))))
+   )
+;; ;#<PImage [^> C-q C-j ]*>\(.*?\)>
+ (defn- update-track-prop-value [track-value the-keyword the-value]
+   (let [coincidences (filter (fn [v]
+                                (let [{:keys [track clip]} (key v)]
+                                  (= track-value track )))
+                              @antropo-loops)]
+     (doseq [c coincidences]
+       (swap!  antropo-loops assoc-in [(key c) the-keyword] the-value))))
 
-(defn change-volume [{:keys [track volume]}]
-  (swap!  history conj (merge {:id "change-volume" :time (get-long-time) } {:track track :volume volume}))
+ (defn change-volume [{:keys [track volume]}]
+          (when @recording-history
+            (swap!  history conj (merge {:id "change-volume" :time (get-long-time) } {:track track :volume volume})))
   (update-track-prop-value track :volume  volume))
 
 (defn change-solo [{:keys [track solo]}]
-  (swap!  history conj (merge {:id "change-solo" :time (get-long-time) } {:track track :solo solo}))
+  (when @recording-history (swap!  history conj (merge {:id "change-solo" :time (get-long-time) } {:track track :solo solo})))
   (update-track-prop-value track :solo  solo))
 
 (defn load-clip [{:keys [track clip nombre] } ]

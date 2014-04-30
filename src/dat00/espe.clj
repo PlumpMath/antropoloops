@@ -31,17 +31,8 @@
   (g/load-resources))
 
 
-
-
-
-(defn draw []
-  (frame-rate 1)
-  (g/draw-background)
-  (g/draw-antropoloops-credits)
-  (when (and (not-empty @antropoloops/antropo-loops) @drawing)
-    (text "drawing!!" 10 175)
-
-    (doseq [track-path-raw history-paths ]
+(defn lines-history []
+  (doseq [track-path-raw history-paths ]
       (let [track-path (first  track-path-raw)
             color-list-path (last track-path-raw) ]
 
@@ -69,7 +60,18 @@
               (bezier (-  ox i) oy (- a1x i) (- a1y i)  a2x  a2y  fx fy))
             )
           ))
-      )
+      ))
+
+
+
+(defn draw []
+  (frame-rate 1)
+  (g/draw-background)
+  (g/draw-antropoloops-credits)
+  (when (and (not-empty @antropoloops/antropo-loops) @drawing)
+    (text "drawing!!" 10 175)
+
+
 
     (let [m (millis)
           active-loops (filter (fn [v]
@@ -119,7 +121,10 @@
                                 (partition 2 1 (map #(analysis/get-changes-state-track oc % sess-loop) (analysis/keyword-tracks)))
               ))
 
-          )
+           )
+    \9          (doall (map
+                  ((fn [arg-list] ) [f-sess-loop] (antropoloops/load-clip (merge (key f-sess-loop) {:nombre (:nombre (val f-sess-loop))}) ))
+                  sess-loop))
     (println (str "no mapped key " (raw-key))))
   )
 (defsketch juan
@@ -145,6 +150,7 @@
       :solo   (do ;(println "CHANGE SOLO!!")
                 (antropoloops/change-solo event))
       :state (do (println "change STate!!" (:state event))
+                 (antropoloops/change-volume (assoc  event :volume 1))
                  (antropoloops/change-loop-state {:clip-value (:clip event)
                                                   :track-value (:track event)
                                                   :state-value (:state event)}))
@@ -161,25 +167,55 @@
   [& args]
   (println args))
 
+
+(defn print-history [data]
+  (let  [facts data
+                  init-time (:time (first sess-history))]
+             (reduce (fn [c hist]
+                       (let [i (:time hist)
+                             wait-for (-  i c)
+                             ]
+
+                         (Thread/sleep 50)
+
+                         (println  hist)
+                         (process-history-event hist)
+                         i
+                         ) )
+                     init-time
+                     facts) ))
+
 (comment "testing antropoloops API!!!"
-         (antropoloops/load-tempo 0.1)
+         (antropoloops/load-tempo 150)
          (antropoloops/change-loop-state {:clip-value 3, :track-value 1 :state-value 2})
 
          (antropoloops/change-volume {:track 1 :volume 3.8})
          (antropoloops/change-volume {:track 1 :volume 0.8})
 
 
+         (antropoloops/reset)
+
 
 
          (comment
-           (let  [facts sess-history
+
+           (let [data (filter #(and (or (= (:state %) 1) (= (:state %) 2)) (= (:id %) "change-loop-state" )) sess-history)]
+             (println "minutos: "(double (/ (/ (- (:time (last data)) (:time (first data))) 1000) 60) ))
+             (map (fn [i] [ (:time i) (:clip i) (if (= (:state i) 2) :IN :OUT)] ) (filter #(= (:track %) 2 ) data ))
+             ;(print-history data)
+
+             )
+           (let [ey (); res of last fn invocation
+                 ]
+             (map (fn [o] (filter #(= o (second %) ) ey)) (distinct (map second ey))))
+           (let  [facts (take 100 sess-history)
                   init-time (:time (first sess-history))]
              (reduce (fn [c hist]
                        (let [i (:time hist)
                              wait-for (-  i c)
                              ]
-                                        ;(Thread/sleep wait-for)
-                         (Thread/sleep 10)
+                                        (Thread/sleep wait-for)
+;                         (Thread/sleep 10)
                                         ;(println wait-for)
                          (println  hist)
                          (process-history-event hist)
@@ -203,7 +239,7 @@
            (def history-paths (let [oc  (analysis/get-ordered-changes sess-history)
                                     f-res (map #(analysis/get-changes-state-track oc % sess-loop)  (analysis/keyword-tracks))
                                     f-cols (map
-                                            #(let [color-range (get  (toxi.color.ColorRange/PRESETS) "COOL")]
+                                            #(let [color-range (get  (toxi.color.ColorRange/PRESETS) "FRESH")]
                                                (.sortByCriteria  (get-colors color-range (toxi.color.TColor/newRandom) (count %) 0.1 )
                                                                  toxi.color.AccessCriteria/BRIGHTNESS false))
                                                          f-res)

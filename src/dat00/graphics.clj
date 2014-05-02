@@ -2,7 +2,7 @@
   (:use
    quil.core))
 
-(declare mundi font)
+(declare mundi font tucan)
 
 (defn draw-antropoloops-credits []
   (fill 255)
@@ -53,19 +53,23 @@
            (pop-matrix))
 )
 (defn setup-graphics []
-  (color-mode :hsb 360 100 100))
+  (color-mode :rgb 1 1 1 100))
 
 (defn load-resources []
   (def mundi (load-image "resources/1_BDatos/mapa_1280x800.png"))
 
   (def font (load-font "resources/1_BDatos/ArialMT-20.vlw"))
-
+      (def tucan (load-shape "data/mapam.svg"))
   )
 
+(def color-bg 0)
+
 (defn draw-background []
-  (background (unhex "2b2b2b"))
-  (image mundi 0 0 )
-  (fill 50)
+  (background 0)
+;  (image mundi 0 0 )
+  (fill color-bg)
   (no-stroke)
   (rect 0 0 (width) 160)
 )
+(defn draw-svg []
+  (shape tucan -65 180 1400 710))

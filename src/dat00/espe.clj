@@ -192,7 +192,7 @@
   (when-not (empty? @lines) (let [each-module (/ (width) (count @lines))
          ]
      (doseq [m (range (count @lines))]
-       (stroke 260)
+       (stroke 1)
        (stroke-weight 1)
        (let [x-m (* m each-module)]
          (line x-m (height) x-m (- (height) 20)))
@@ -295,7 +295,7 @@
                              wait-for (-  i c)
                              ]
 
-                         (Thread/sleep 50)
+                         (Thread/sleep 5)
 
                          (println  hist)
                          (process-history-event hist)
@@ -319,7 +319,7 @@
 
                               (Thread/sleep 2)
                                         ;(println wait-for)
-                              (println  hist)
+ ;                             (println  hist)
                               (process-history-event hist)
                               i
                               ) )

@@ -65,7 +65,7 @@
 (def color-bg 0)
 
 (defn draw-background []
-  (background 0)
+  (background 1)
 ;  (image mundi 0 0 )
   (fill color-bg)
   (no-stroke)

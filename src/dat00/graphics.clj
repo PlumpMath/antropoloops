@@ -33,7 +33,7 @@
                  (fill h s b 2)
                  (arc 0 0 (* d 2) (* d 2) (- (radians (* i 24)) HALF-PI) (- (radians 360) HALF-PI))
                  )
-    #_(cond
+    (cond
      (<= d 60) :a
      (and (< d 60) (<= d 90)) :b
      (and  (> d 40)) :c
@@ -65,7 +65,7 @@
 (def color-bg 0)
 
 (defn draw-background []
-  (background 1)
+  (background 0)
 ;  (image mundi 0 0 )
   (fill color-bg)
   (no-stroke)

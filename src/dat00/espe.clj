@@ -186,10 +186,10 @@
     )
 
 
-  (doall
+  #_(doall
    (map print-module-time @lines (range)))
 
-  (when-not (empty? @lines) (let [each-module (/ (width) (count @lines))
+  #_(when-not (empty? @lines) (let [each-module (/ (width) (count @lines))
          ]
      (doseq [m (range (count @lines))]
        (stroke 1)
@@ -343,10 +343,12 @@
 
            (let [data (filter #(and (or (= (:state %) 1) (= (:state %) 2)) (= (:id %) "change-loop-state" )) sess-history)]
              (println "minutos: "(double (/ (/ (- (:time (last data)) (:time (first data))) 1000) 60) ))
-             (map (fn [i] [ (:time i) (:clip i) (if (= (:state i) 2) :IN :OUT)] ) (filter #(= (:track %) 2 ) data ))
+             (map (fn [i] [ (:time i) (:clip i) (:track i) (if (= (:state i) 2) :IN :OUT)] )data )
              ;(print-history data)
 
              )
+
+
            (let [ey (); res of last fn invocation
                  ]
              (map (fn [o] (filter #(= o (second %) ) ey)) (distinct (map second ey))))

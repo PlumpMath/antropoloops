@@ -186,10 +186,10 @@
     )
 
 
-  #_(doall
+  (doall
    (map print-module-time @lines (range)))
 
-  #_(when-not (empty? @lines) (let [each-module (/ (width) (count @lines))
+  (when-not (empty? @lines) (let [each-module (/ (width) (count @lines))
          ]
      (doseq [m (range (count @lines))]
        (stroke 1)

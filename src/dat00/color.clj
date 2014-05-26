@@ -1,29 +1,22 @@
 (ns dat00.color
   (:use quil.core
         dat00.protocols
-;        [iroh.core :as iroh]
         [dat00.util :as ut]
         [quil.helpers.drawing :only [line-join-points]]
         [quil.helpers.seqs :only [range-incl steps]])
-
-
   (:import [geomerative RShape RG RPoint RFont]
            [processing.core PApplet ]
            [toxi.color TColor ColorList ColorRange NamedColor AccessCriteria]
            [toxi.color.theory ColorTheoryStrategy ColorTheoryRegistry]
-           )
-   )
+           ))
 
 (defn get-colors [^ColorRange cr t-color num-colors variance]
-
-  (.getColors cr t-color num-colors variance)
-  )
-
+  (.getColors cr t-color num-colors variance))
 
 (count (take 10 (repeatedly (fn [] (toxi.color.TColor/newRandom)))))
 
 (def strategies (ColorTheoryRegistry/getRegisteredStrategies))
-(map #(.getName %) strategies)
+(comment (map #(.getName %) strategies))
 
 
 (do

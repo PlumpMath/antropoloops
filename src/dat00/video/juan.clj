@@ -9,6 +9,8 @@
   (println "setup completed!")
   )
 
+(def noStroke 100)
+
 (defn draw []
   (image mov 0 0 ))
 

@@ -10,8 +10,8 @@
  ;                [quil-video/jna "1"]
  ;                [quil-video/video "1"]
  ;                [quil-video/gstreamer-java "1"]
-[clj-time "0.7.0"]
-[im.chit/iroh "0.1.10"]
+                 [clj-time "0.7.0"]
+                 [im.chit/iroh "0.1.10"]
 
                 ; [com.datomic/datomic-free "0.9.4556"]
                  ]

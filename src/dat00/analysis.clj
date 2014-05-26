@@ -32,12 +32,6 @@
 
 
 
-
-
-
-
-
-
 (defn get-changes-state-track[ordered-changes track data-sess-loop]
   (let [
         active-1 (filter #(= 2 (:state %)) (track ordered-changes))

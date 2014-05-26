@@ -7,8 +7,7 @@
   (:import [geomerative RShape RG RPoint RFont]
            [processing.core PApplet ]
            [toxi.color TColor ColorList ColorRange NamedColor AccessCriteria]
-           [toxi.color.theory ColorTheoryStrategy ColorTheoryRegistry]
-           ))
+           [toxi.color.theory ColorTheoryStrategy ColorTheoryRegistry]))
 
 (defn get-colors [^ColorRange cr t-color num-colors variance]
   (.getColors cr t-color num-colors variance))
@@ -40,9 +39,7 @@
 
 
 
-(defn setup[]
-
-  )
+(defn setup[])
 
 (map (fn [cl h]
        [cl h]) range-color-list (range 250 (+ 250 (* 50 (count range-color-list))) 20 ))

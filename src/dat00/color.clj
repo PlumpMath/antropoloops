@@ -27,11 +27,7 @@
   (def cl2 (. (.getColors (doto (ColorRange. cl) (.addBrightnessRange 0 1) ) nil 10 0.05) (sortByDistance false)))
   (def range-color-list  (map #(.sortByCriteria  (get-colors (val %) random-color 20 0.1 ) AccessCriteria/BRIGHTNESS false) (ColorRange/PRESETS))))
 
-
 (keys (ColorRange/PRESETS))
-
-
-
 
 
 ;(get-count cl2)

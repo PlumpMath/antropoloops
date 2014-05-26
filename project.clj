@@ -12,9 +12,8 @@
  ;                [quil-video/gstreamer-java "1"]
                  [clj-time "0.7.0"]
                  [im.chit/iroh "0.1.10"]
-
                 ; [com.datomic/datomic-free "0.9.4556"]
                  ]
   :resource-paths ["lib/gstreamer-java.jar" "lib/geomerative.jar" "lib/batikfont" "lib/video.jar" "lib/jna.jar" "lib/macosx64" "lib/oscP5.jar" "lib/colorutils.jar" "lib/toxiclibscore.jar"]
-;:main dat00.espe
+                                        ;:main dat00.espe
   )

@@ -109,9 +109,7 @@
 
 (defn read-clip-info [osc-message ]
   (let [[track clip nombre]  (.arguments osc-message)]
-    { :track track :clip clip :nombre nombre}
-    )
-  )
+    {:track track :clip clip :nombre nombre}))
 
 (defn init-oscP5-communication [papplet]
   (osc/init-oscP5 papplet))

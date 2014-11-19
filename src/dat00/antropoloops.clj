@@ -29,7 +29,7 @@
   (swap!  antropo-loops assoc-in [{:clip clip-value :track track-value} :state] state-value)
    )
 ;; ;#<PImage [^> C-q C-j ]*>\(.*?\)>
- (defn- update-track-prop-value [track-value the-keyword the-value]
+(defn- update-track-prop-value [track-value the-keyword the-value]
    (let [coincidences (filter (fn [v]
                                 (let [{:keys [track clip]} (key v)]
                                   (= track-value track )))
@@ -37,7 +37,7 @@
      (doseq [c coincidences]
        (swap!  antropo-loops assoc-in [(key c) the-keyword] the-value))))
 
- (defn change-volume [{:keys [track volume]}]
+(defn change-volume [{:keys [track volume]}]
           (when @recording-history
             (swap!  history conj (merge {:id "change-volume" :time (get-long-time) } {:track track :volume volume})))
   (update-track-prop-value track :volume  volume))
@@ -60,21 +60,13 @@
                                4 (random 195 210)
                                5 (random 230 245)
                                6 (random 25 40)
-                               7 (random 50 65)
-                               )
+                               7 (random 50 65))
                     :image  (load-image (str "resources/0_portadas/" nombre  ".jpg"))
                     :song  song
                     :lugar (first (filter #(= (:lugar %) (:lugar song)) bd/lugares))
                     :volume 0
-                    :loopend 1
-                    }
-        ]
-
-
-
-    (swap! antropo-loops assoc (select-keys antro-loop [:track :clip] ) antro-loop )
-    )
-  )
+                    :loopend 1}]
+    (swap! antropo-loops assoc (select-keys antro-loop [:track :clip]) antro-loop)))
 
 (defn load-tempo [tempo]
   (def tempo 0.5)

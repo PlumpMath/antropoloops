@@ -22,14 +22,13 @@
 
 (defn setup  []
 
-  (when @antropoloops/recording-history
+  #_(when @antropoloops/recording-history
     (ut/remove-file "tmp/history.json")
     (ut/remove-file "tmp/aloops.json")
     (ut/new-io-file "tmp/history.json"))
 
   (g/setup-graphics)
   (g/load-resources))
-
 
 (defn lines-history []
   (doseq [track-path-raw history-paths ]
@@ -62,13 +61,11 @@
           ))
       ))
 
-
-
 (def lugares-inside (atom {}))
 
 (def lines  (atom []))
-(def main-count (atom 0))
 
+(def main-count (atom 0))
 
 (defn print-interior [c int-lines each-modulo-width [-color lugar volume] contador-lines-int ]
   (let [starting (* c each-modulo-width)
@@ -130,13 +127,11 @@
 
       )))
 
-
 (defn print-module-time [int-lines c]
 
   (when-not (empty? int-lines)
     (let [each-modulo-width (/ (width) (count @lines))]
       (doall (map (partial print-interior c int-lines each-modulo-width) int-lines (range) )))))
-
 
 (defn draw []
   (frame-rate 5)
@@ -205,17 +200,11 @@
 ;(println (width))
   )
 
-
-
-
-
 (defn key-press []
   (println (str "Key pressed: " (raw-key)))
   (condp = (raw-key)
-    \1 (do
-         (antropoloops/reset)
-         )
-    \2 (async-request-loops-info)
+    \1 (antropoloops/reset)
+    \2 (antropoloops/async-request-loops-info)
     \3 (do (println "draw running")
            (reset! drawing true))
     \4 (println "println loops indexed" antropoloops/antropo-loops-indexed)
@@ -245,7 +234,6 @@
     (println (str "no mapped key " (raw-key))))
   )
 
-
 (defsketch juan
   :setup setup
   :draw draw
@@ -253,6 +241,8 @@
   :osc-event antropoloops/process-osc-event
   :key-typed key-press
   )
+
+
 
 (osc-loops/init-oscP5-communication juan)
 
@@ -329,10 +319,10 @@
 
 (comment "testing antropoloops API!!!"
          (antropoloops/load-tempo 150)
-         (antropoloops/change-loop-state {:clip-value 1, :track-value 1 :state-value 1})
+         (antropoloops/change-loop-state {:clip-value 1, :track-value 1 :state-value 2})
 
          (antropoloops/change-volume {:track 1 :volume 3.8})
-         (antropoloops/change-volume {:track 1 :volume 0.8})
+         (antropoloops/change-volume {:track 1 :volume 0.1})
 
 
          (antropoloops/reset)
